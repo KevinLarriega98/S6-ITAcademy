@@ -1,0 +1,108 @@
+.web-configurator {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.web-configurator__helper {
+  margin: 0;
+  color: #475467;
+  font-size: 0.95rem;
+}
+
+.web-configurator__totals {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 0;
+}
+
+.web-configurator__totals div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.web-configurator__totals dt {
+  font-size: 0.9rem;
+  color: #475467;
+  font-weight: 500;
+}
+
+.web-configurator__totals dd {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #101828;
+}
+
+.web-configurator__totals-item--highlight dd {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.web-configurator__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.web-configurator__control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  color: #101828;
+  font-weight: 600;
+}
+
+.web-configurator__counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #f3f4f6;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+}
+
+.web-configurator__counter button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: #101828;
+  color: #ffffff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.web-configurator__counter button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.14);
+}
+
+.web-configurator__counter span {
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #101828;
+}
+
+@media (min-width: 768px) {
+  .web-configurator__controls {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .web-configurator__totals {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

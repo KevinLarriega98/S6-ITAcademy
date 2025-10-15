@@ -1,0 +1,18 @@
+.app-header {
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.app-header__brand {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #0f172a;
+  text-decoration: none;
+}

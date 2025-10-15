@@ -1,0 +1,166 @@
+.welcome-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.75rem 1.75rem 3.5rem;
+  background: linear-gradient(155deg, #f6f8fc 0%, #ffffff 100%);
+}
+
+.welcome-page__panel {
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3rem;
+  text-align: left;
+}
+
+.welcome-page__header,
+.welcome-page__intro,
+.welcome-page__benefits {
+  width: 100%;
+  max-width: 51.25rem;
+  margin: 0 auto;
+}
+
+.welcome-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+  text-align: center;
+}
+
+.welcome-page__eyebrow-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.welcome-page__eyebrow {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #2563eb;
+  margin: 0;
+}
+
+.welcome-page__title {
+  font-size: 2rem;
+  line-height: 1.15;
+  color: #101828;
+  margin: 0;
+}
+
+.welcome-page__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.welcome-page__description {
+  color: #475467;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+
+.welcome-page__separator {
+  width: 4.5rem;
+  height: 0.2rem;
+  border-radius: 3.125rem;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  margin: 0 auto;
+}
+
+.welcome-page__benefits {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0;
+  list-style: none;
+}
+
+.welcome-page__benefits li {
+  position: relative;
+  padding-left: 2rem;
+  color: #1f2937;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.welcome-page__benefits li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0.4rem;
+  top: 0.25rem;
+  font-size: 0.9rem;
+  color: #2563eb;
+}
+
+.welcome-page__cta {
+  align-self: center;
+  padding: 0.85rem 1.75rem;
+  border-radius: 3.125rem;
+  border: none;
+  background-color: #101828;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.welcome-page__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
+}
+
+@media (min-width: 768px) {
+  .welcome-page {
+    padding: 4rem 4rem 5rem;
+  }
+
+  .welcome-page__panel {
+    gap: 3.25rem;
+    padding-inline: 2.5rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .welcome-page__intro {
+    align-items: flex-start;
+  }
+
+  .welcome-page__benefits {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.1rem 1.75rem;
+  }
+
+  .welcome-page__eyebrow-group {
+    align-items: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .welcome-page {
+    padding: 4.5rem 6rem 5.5rem;
+  }
+
+  .welcome-page__panel {
+    max-width: 80rem;
+    padding-inline: 3.75rem;
+  }
+
+  .welcome-page__benefits {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
