@@ -15,12 +15,13 @@
 
 .web-configurator__totals {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
   margin: 0;
+  padding: 0;
 }
 
-.web-configurator__totals div {
+.web-configurator__totals-group {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -42,6 +43,7 @@
 .web-configurator__totals-item--highlight dd {
   font-size: 1.2rem;
   font-weight: 700;
+  color: #0f172a;
 }
 
 .web-configurator__controls {
@@ -53,10 +55,17 @@
 .web-configurator__control {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   gap: 1rem;
   color: #101828;
   font-weight: 600;
+}
+
+.web-configurator__label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
 }
 
 .web-configurator__counter {
@@ -80,7 +89,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
 }
 
 .web-configurator__counter button:hover {
@@ -88,11 +97,37 @@
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.14);
 }
 
+.web-configurator__counter button:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+.web-configurator__counter button:disabled {
+  cursor: not-allowed;
+  background-color: #94a3b8;
+  box-shadow: none;
+  transform: none;
+}
+
 .web-configurator__counter span {
   min-width: 24px;
   text-align: center;
   font-size: 1.1rem;
   color: #101828;
+  font-weight: 600;
+}
+
+.web-configurator__info-button {
+  width: 22px;
+  height: 22px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.web-configurator__info-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
 }
 
 @media (min-width: 768px) {
