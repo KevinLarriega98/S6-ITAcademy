@@ -1,43 +1,24 @@
-import { useState } from "react"
+﻿import { useState, useMemo } from "react"
 import type { FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import ServiceSelectionSection from "../components/ServiceSelectionSection"
 import BudgetRequestSection from "../components/BudgetRequestSection"
 import BudgetListSection from "../components/BudgetListSection"
-import type { SavedBudget, ServiceOption } from "../types/budget"
+import type { SavedBudget } from "../types/budget"
 import "./BudgetPage.css"
-
-const SERVICE_OPTIONS: ServiceOption[] = [
-  {
-    id: "seo",
-    title: "Seo",
-    description: "Programación de una web responsive completa",
-    price: 300,
-  },
-  {
-    id: "ads",
-    title: "Ads",
-    description: "Programación de una web responsive completa",
-    price: 400,
-  },
-  {
-    id: "web",
-    title: "Web",
-    description: "Programación de una web responsive completa",
-    price: 500,
-  },
-]
-
-const WEB_SERVICE_ID = "web"
-const WEB_CONFIGURATION_UNIT_PRICE = 30
-const WEB_BASE_PRICE = SERVICE_OPTIONS.find((service) => service.id === WEB_SERVICE_ID)?.price ?? 0
-const CURRENCY_SYMBOL = "€"
-const NAME_PATTERN = "^[A-Za-zÀ-ÿ]{2,}(?:\\s[A-Za-zÀ-ÿ]+)*$"
-const PHONE_PATTERN = "^\\d{9}$"
-const EMAIL_PATTERN = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
-const NAME_REGEX = new RegExp(NAME_PATTERN, "u")
-const PHONE_REGEX = new RegExp(PHONE_PATTERN)
-const EMAIL_REGEX = new RegExp(EMAIL_PATTERN)
+import {
+  NAME_PATTERN,
+  PHONE_PATTERN,
+  EMAIL_PATTERN,
+  isNameValid as validateName,
+  isPhoneValid as validatePhone,
+  isEmailValid as validateEmail,
+  normalize,
+} from "../utils/validation"
+import { SERVICE_OPTIONS, WEB_BASE_PRICE } from "../data/services"
+import { WEB_SERVICE_ID, WEB_CONFIGURATION_UNIT_PRICE, CURRENCY_SYMBOL } from "../constants/web"
+import { buildServiceLabel, calculateTotalAmount } from "../utils/budget"
+import { generateId } from "../utils/id"
 
 const BudgetPage = () => {
   const navigate = useNavigate()
@@ -63,34 +44,13 @@ const BudgetPage = () => {
   const webExtraPrice = calculateWebExtraPrice(webPages, webLanguages)
   const webTotalPrice = WEB_BASE_PRICE + webExtraPrice
 
-  const buildServiceLabel = (serviceId: string, pages: number, languages: number) => {
-    if (serviceId === WEB_SERVICE_ID) {
-      const pagesLabel = `${pages} ${pages === 1 ? "página" : "páginas"}`
-      const languagesLabel = `${languages} ${languages === 1 ? "idioma" : "idiomas"}`
-      return `Web (${pagesLabel} y ${languagesLabel})`
-    }
-
-    const service = SERVICE_OPTIONS.find((item) => item.id === serviceId)
-    return service?.title ?? serviceId
-  }
-
-  const calculateTotalAmount = (services: string[], webTotal: number) =>
-    services.reduce((amount, serviceId) => {
-      if (serviceId === WEB_SERVICE_ID) {
-        return amount + webTotal
-      }
-
-      const service = SERVICE_OPTIONS.find((item) => item.id === serviceId)
-      return service ? amount + service.price : amount
-    }, 0)
-
-  const totalAmount = calculateTotalAmount(selectedServices, webTotalPrice)
-  const trimmedName = clientName.trim()
-  const trimmedPhone = clientPhone.trim()
-  const trimmedEmail = clientEmail.trim()
-  const isNameValid = NAME_REGEX.test(trimmedName)
-  const isPhoneValid = PHONE_REGEX.test(trimmedPhone)
-  const isEmailValid = EMAIL_REGEX.test(trimmedEmail)
+  const totalAmount = useMemo(() => calculateTotalAmount(selectedServices, webTotalPrice), [selectedServices, webTotalPrice])
+  const trimmedName = normalize(clientName)
+  const trimmedPhone = normalize(clientPhone)
+  const trimmedEmail = normalize(clientEmail)
+  const isNameValid = validateName(trimmedName)
+  const isPhoneValid = validatePhone(trimmedPhone)
+  const isEmailValid = validateEmail(trimmedEmail)
 
   const handleBudgetSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -106,7 +66,7 @@ const BudgetPage = () => {
     }
 
     const newBudget: SavedBudget = {
-      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      id: generateId(),
       clientName: trimmedName,
       phone: trimmedPhone,
       email: trimmedEmail,
