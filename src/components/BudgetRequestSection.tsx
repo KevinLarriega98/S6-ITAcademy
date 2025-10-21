@@ -64,7 +64,7 @@ const BudgetRequestSection = ({
           required
           onChange={(event) => onClientEmailChange(event.target.value)}
         />
-        <button className="budget-request__submit" type="submit" disabled={isSubmitDisabled}>
+        <button className="btn budget-request__submit" type="submit" disabled={isSubmitDisabled}>
           Solicitar presupuesto
         </button>
       </form>

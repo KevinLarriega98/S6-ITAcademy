@@ -1,4 +1,4 @@
-﻿import { useState, useMemo } from "react"
+import { useState, useMemo } from "react"
 import type { FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import ServiceSelectionSection from "../components/ServiceSelectionSection"
@@ -72,6 +72,7 @@ const BudgetPage = () => {
       email: trimmedEmail,
       services: selectedServices.map((serviceId) => buildServiceLabel(serviceId, webPages, webLanguages)),
       total: totalAmount,
+      createdAt: new Date().toISOString(),
     }
 
     setBudgets((current) => [newBudget, ...current])
@@ -125,7 +126,7 @@ const BudgetPage = () => {
       <BudgetListSection budgets={budgets} currencySymbol={CURRENCY_SYMBOL} />
 
       <footer className="budget-page__footer">
-        <button type="button" onClick={() => navigate("/")}>
+        <button type="button" className="btn budget-page__back" onClick={() => navigate("/")}>
           Volver al inicio
         </button>
       </footer>

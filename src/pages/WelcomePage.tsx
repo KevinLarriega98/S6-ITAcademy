@@ -28,7 +28,7 @@ const WelcomePage = () => {
           <li>Toma decisiones informadas con cifras transparentes.</li>
         </ul>
 
-        <button className="welcome-page__cta" type="button" onClick={() => navigate("/budget")}>
+        <button className="btn welcome-page__cta" type="button" onClick={() => navigate("/budget")}>
           Empezar a calcular
         </button>
       </section>

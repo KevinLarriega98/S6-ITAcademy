@@ -77,36 +77,21 @@
   padding: 0.35rem 0.75rem;
 }
 
-.web-configurator__counter button {
+.web-configurator__counter-button {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  border: none;
-  background-color: #101828;
-  color: #ffffff;
   font-size: 1.1rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  padding: 0;
 }
 
-.web-configurator__counter button:hover {
+.web-configurator__counter-button:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.14);
 }
 
-.web-configurator__counter button:focus-visible {
-  outline: 2px solid #38bdf8;
-  outline-offset: 2px;
-}
-
-.web-configurator__counter button:disabled {
-  cursor: not-allowed;
+.web-configurator__counter-button:disabled {
   background-color: #94a3b8;
   box-shadow: none;
-  transform: none;
 }
 
 .web-configurator__counter span {
@@ -120,12 +105,13 @@
 .web-configurator__info-button {
   width: 22px;
   height: 22px;
+  padding: 0;
   font-size: 0.7rem;
   font-weight: 600;
   line-height: 1;
 }
 
-.web-configurator__info-button:hover {
+.web-configurator__info-button:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
 }

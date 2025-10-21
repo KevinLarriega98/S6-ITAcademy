@@ -1,6 +1,7 @@
 ﻿import "./WebConfigurator.css"
 import HelpModal from "./HelpModal"
 import { useState } from "react"
+import { CURRENCY_SYMBOL } from "../constants/web"
 
 type WebConfiguratorProps = {
   pages: number
@@ -14,7 +15,6 @@ type WebConfiguratorProps = {
 type HelpTopic = "pages" | "languages"
 
 const MIN_VALUE = 0
-const CURRENCY_SYMBOL = "€"
 
 const getTopicText = (topic: HelpTopic | null) => {
   if (topic === "pages") {
@@ -43,7 +43,7 @@ const CounterControl = ({ label, value, onChange, onHelp }: CounterControlProps)
     <div className="web-configurator__control">
       <div className="web-configurator__label">
         {onHelp && (
-          <button type="button" className="btn-circle web-configurator__info-button" onClick={onHelp}>
+          <button type="button" className="btn btn-circle web-configurator__info-button" onClick={onHelp}>
             i
           </button>
         )}
@@ -51,11 +51,22 @@ const CounterControl = ({ label, value, onChange, onHelp }: CounterControlProps)
       </div>
 
       <div className="web-configurator__counter">
-        <button type="button" onClick={decrease} aria-label={`Reducir ${label}`} disabled={value <= MIN_VALUE}>
+        <button
+          type="button"
+          className="btn btn-circle web-configurator__counter-button"
+          onClick={decrease}
+          aria-label={`Reducir ${label}`}
+          disabled={value <= MIN_VALUE}
+        >
           -
         </button>
         <span>{value}</span>
-        <button type="button" onClick={increase} aria-label={`Aumentar ${label}`}>
+        <button
+          type="button"
+          className="btn btn-circle web-configurator__counter-button"
+          onClick={increase}
+          aria-label={`Aumentar ${label}`}
+        >
           +
         </button>
       </div>
@@ -110,7 +121,7 @@ const WebConfigurator = ({
         {topicInfo && (
           <>
             <p>{`Agrega ${topicInfo.articlePlural} ${topicInfo.plural} que tendrá tu proyecto.`}</p>
-            <p>{`El costo de cada ${topicInfo.singular} es de 30 ${CURRENCY_SYMBOL}.`}</p>
+            <p>{`El coste de cada ${topicInfo.singular} es de 30 ${CURRENCY_SYMBOL}.`}</p>
           </>
         )}
       </HelpModal>

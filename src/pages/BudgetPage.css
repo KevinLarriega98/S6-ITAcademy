@@ -19,20 +19,7 @@
   margin-top: 0.5rem;
 }
 
-.budget-page__footer button {
+.budget-page__back {
   padding: 0.8rem 1.6rem;
-  border-radius: 50px;
-  border: none;
-  background-color: #101828;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
   letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.budget-page__footer button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
 }

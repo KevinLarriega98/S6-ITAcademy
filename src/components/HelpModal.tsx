@@ -52,7 +52,7 @@ const HelpModal = ({ open, title, children, onClose }: HelpModalProps) => {
           <h2 id="help-modal-title">{title ?? "Help"}</h2>
           <button
             type="button"
-            className="btn-circle help-modal__close"
+            className="btn btn-circle help-modal__close"
             aria-label="Cerrar ayuda"
             onClick={onClose}
           >
@@ -63,7 +63,7 @@ const HelpModal = ({ open, title, children, onClose }: HelpModalProps) => {
         <div className="help-modal__body">{children}</div>
 
         <footer className="help-modal__footer">
-          <button type="button" className="help-modal__ok" onClick={onClose}>
+          <button type="button" className="btn help-modal__ok" onClick={onClose}>
             OK
           </button>
         </footer>

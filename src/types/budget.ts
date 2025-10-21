@@ -12,4 +12,5 @@ export type SavedBudget = {
   email: string
   services: string[]
   total: number
+  createdAt: string
 }

@@ -108,20 +108,7 @@
 .welcome-page__cta {
   align-self: center;
   padding: 0.85rem 1.75rem;
-  border-radius: 3.125rem;
-  border: none;
-  background-color: #101828;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
   letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.welcome-page__cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
 }
 
 @media (min-width: 768px) {

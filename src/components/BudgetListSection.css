@@ -4,11 +4,62 @@
   gap: 1.25rem;
 }
 
+.budget-list__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .budget-list__title {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
   color: #101828;
+}
+
+.budget-list__sort {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.budget-list__sort-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: #667085;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.budget-list__sort-button:hover {
+  color: #101828;
+}
+
+.budget-list__sort-button--active {
+  color: #101828;
+  font-weight: 600;
+}
+
+.budget-list__sort-icon {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+}
+
+.budget-list__sort-icon--asc {
+  border-bottom: 6px solid currentColor;
+}
+
+.budget-list__sort-icon--desc {
+  border-top: 6px solid currentColor;
 }
 
 .budget-list__empty {
