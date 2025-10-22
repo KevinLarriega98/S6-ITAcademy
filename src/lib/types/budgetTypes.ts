@@ -5,6 +5,8 @@ export type ServiceOption = {
   price: number
 }
 
+export type BillingCycle = "monthly" | "annual"
+
 export type SavedBudget = {
   id: string
   clientName: string
@@ -13,4 +15,6 @@ export type SavedBudget = {
   services: string[]
   total: number
   createdAt: string
+  billingCycle: BillingCycle
+  discountRate: number
 }

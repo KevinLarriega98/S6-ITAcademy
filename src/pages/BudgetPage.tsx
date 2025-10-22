@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import type { FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import ServiceSelectionSection from "../components/ServiceSelectionSection"
 import BudgetRequestSection from "../components/BudgetRequestSection"
 import BudgetListSection from "../components/BudgetListSection"
-import type { SavedBudget } from "../types/budget"
+import type { BillingCycle, SavedBudget } from "../lib/types/budgetTypes"
+import { useBudgetCalculator } from "../hooks/useBudgetCalculator"
 import "./BudgetPage.css"
 import {
   NAME_PATTERN,
@@ -15,36 +16,32 @@ import {
   isEmailValid as validateEmail,
   normalize,
 } from "../utils/validation"
-import { SERVICE_OPTIONS, WEB_BASE_PRICE } from "../data/services"
-import { WEB_SERVICE_ID, WEB_CONFIGURATION_UNIT_PRICE, CURRENCY_SYMBOL } from "../constants/web"
-import { buildServiceLabel, calculateTotalAmount } from "../utils/budget"
+import { SERVICE_OPTIONS } from "../data/services"
+import { WEB_SERVICE_ID, CURRENCY_SYMBOL, ANNUAL_DISCOUNT_RATE } from "../lib/constants/web"
+import { buildServiceLabel } from "../utils/budgetCalculations"
 import { generateId } from "../utils/id"
 
 const BudgetPage = () => {
   const navigate = useNavigate()
-  const [selectedServices, setSelectedServices] = useState<string[]>([])
-  const [webPages, setWebPages] = useState(0)
-  const [webLanguages, setWebLanguages] = useState(0)
   const [clientName, setClientName] = useState("")
   const [clientPhone, setClientPhone] = useState("")
   const [clientEmail, setClientEmail] = useState("")
   const [budgets, setBudgets] = useState<SavedBudget[]>([])
 
-  const toggleService = (serviceId: string) => {
-    setSelectedServices((current) =>
-      current.includes(serviceId)
-        ? current.filter((id) => id !== serviceId)
-        : [...current, serviceId],
-    )
-  }
+  const {
+    selectedServices,
+    toggleService,
+    resetSelections,
+    isAnnualBilling,
+    toggleBillingCycle,
+    servicePriceMap,
+    pricing,
+    webConfig,
+  } = useBudgetCalculator({ discountRate: ANNUAL_DISCOUNT_RATE })
 
-  const calculateWebExtraPrice = (pages: number, languages: number) =>
-    (pages + languages) * WEB_CONFIGURATION_UNIT_PRICE
+  const { webBasePrice, webExtraPrice, webTotalPrice, totalAmount } = pricing
+  const { pages: webPages, languages: webLanguages, setPages, setLanguages } = webConfig
 
-  const webExtraPrice = calculateWebExtraPrice(webPages, webLanguages)
-  const webTotalPrice = WEB_BASE_PRICE + webExtraPrice
-
-  const totalAmount = useMemo(() => calculateTotalAmount(selectedServices, webTotalPrice), [selectedServices, webTotalPrice])
   const trimmedName = normalize(clientName)
   const trimmedPhone = normalize(clientPhone)
   const trimmedEmail = normalize(clientEmail)
@@ -65,6 +62,8 @@ const BudgetPage = () => {
       return
     }
 
+    const billingCycle: BillingCycle = isAnnualBilling ? "annual" : "monthly"
+
     const newBudget: SavedBudget = {
       id: generateId(),
       clientName: trimmedName,
@@ -73,15 +72,15 @@ const BudgetPage = () => {
       services: selectedServices.map((serviceId) => buildServiceLabel(serviceId, webPages, webLanguages)),
       total: totalAmount,
       createdAt: new Date().toISOString(),
+      billingCycle,
+      discountRate: isAnnualBilling ? ANNUAL_DISCOUNT_RATE : 0,
     }
 
     setBudgets((current) => [newBudget, ...current])
     setClientName("")
     setClientPhone("")
     setClientEmail("")
-    setSelectedServices([])
-    setWebPages(0)
-    setWebLanguages(0)
+    resetSelections()
   }
 
   const isSubmitDisabled =
@@ -99,14 +98,18 @@ const BudgetPage = () => {
         webConfig={{
           pages: webPages,
           languages: webLanguages,
-          onPagesChange: setWebPages,
-          onLanguagesChange: setWebLanguages,
-          basePrice: WEB_BASE_PRICE,
+          onPagesChange: setPages,
+          onLanguagesChange: setLanguages,
+          basePrice: webBasePrice,
           extraPrice: webExtraPrice,
           totalPrice: webTotalPrice,
         }}
         currencySymbol={CURRENCY_SYMBOL}
         totalAmount={totalAmount}
+        isAnnualBilling={isAnnualBilling}
+        onToggleAnnualBilling={toggleBillingCycle}
+        discountRate={ANNUAL_DISCOUNT_RATE}
+        servicePriceMap={servicePriceMap}
       />
 
       <BudgetRequestSection

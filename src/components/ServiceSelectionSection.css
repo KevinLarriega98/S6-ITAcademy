@@ -4,6 +4,65 @@
   gap: 1.25rem;
 }
 
+.service-billing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+  align-self: center;
+  flex-wrap: wrap;
+  color: #667085;
+  font-weight: 500;
+}
+
+.service-billing__label {
+  transition: color 0.2s ease;
+}
+
+.service-billing__label--active {
+  color: #101828;
+  font-weight: 600;
+}
+
+.service-billing__switch {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  border-radius: 999px;
+  border: none;
+  background-color: #d0d5dd;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0;
+}
+
+.service-billing__switch:focus-visible {
+  outline: 2px solid #101828;
+  outline-offset: 2px;
+}
+
+.service-billing__switch--active {
+  background-color: #12b76a;
+}
+
+.service-billing__thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
+  transition: transform 0.2s ease;
+  transform: translateX(0);
+}
+
+.service-billing__switch--active .service-billing__thumb {
+  transform: translateX(28px);
+}
+
 .service-card {
   padding: 1.75rem 2rem;
   border-radius: 1.5rem;
@@ -28,6 +87,18 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+}
+
+.service-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.service-card__discount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f97316;
 }
 
 .service-card__row--bottom {

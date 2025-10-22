@@ -1,5 +1,5 @@
-import type { ServiceOption } from "../types/budget"
-import { WEB_SERVICE_ID } from "../constants/web"
+import type { ServiceOption } from "../lib/types/budgetTypes"
+import { WEB_SERVICE_ID } from "../lib/constants/web"
 
 export const SERVICE_OPTIONS: ServiceOption[] = [
     {

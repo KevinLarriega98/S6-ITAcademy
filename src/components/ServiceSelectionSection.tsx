@@ -1,6 +1,9 @@
+import ServiceBillingToggle from "./service-selection/ServiceBillingToggle"
+import ServiceCard from "./service-selection/ServiceCard"
 import WebConfigurator from "./WebConfigurator"
 import "./ServiceSelectionSection.css"
-import type { ServiceOption } from "../types/budget"
+import type { ServiceOption } from "../lib/types/budgetTypes"
+import { formatPrice } from "../utils/format"
 
 type ServiceSelectionSectionProps = {
   services: ServiceOption[]
@@ -18,6 +21,10 @@ type ServiceSelectionSectionProps = {
   }
   currencySymbol: string
   totalAmount: number
+  isAnnualBilling: boolean
+  onToggleAnnualBilling: () => void
+  discountRate: number
+  servicePriceMap: Map<string, number>
 }
 
 const ServiceSelectionSection = ({
@@ -28,39 +35,41 @@ const ServiceSelectionSection = ({
   webConfig,
   currencySymbol,
   totalAmount,
+  isAnnualBilling,
+  onToggleAnnualBilling,
+  discountRate,
+  servicePriceMap,
 }: ServiceSelectionSectionProps) => {
+  const discountLabel = `Ahorra un ${Math.round(discountRate * 100)}%`
+  const formattedTotalAmount = formatPrice(totalAmount)
+
   const isSelected = (serviceId: string) => selectedServices.includes(serviceId)
 
   return (
     <>
       <section className="service-list">
+        <ServiceBillingToggle isAnnualBilling={isAnnualBilling} onToggle={onToggleAnnualBilling} />
+
         {services.map((service) => {
           const selected = isSelected(service.id)
-          const displayPrice = service.id === webServiceId ? webConfig.totalPrice : service.price
+          const isWebService = service.id === webServiceId
+          const displayPrice = isWebService
+            ? webConfig.totalPrice
+            : servicePriceMap.get(service.id) ?? service.price
+          const formattedPrice = formatPrice(displayPrice)
 
           return (
-            <article
+            <ServiceCard
               key={service.id}
-              className={`service-card${selected ? " service-card--selected" : ""}`}
+              service={service}
+              currencySymbol={currencySymbol}
+              price={formattedPrice}
+              isSelected={selected}
+              showDiscount={isAnnualBilling}
+              discountLabel={discountLabel}
+              onToggle={() => onToggleService(service.id)}
             >
-              <div className="service-card__row">
-                <h2 className="service-card__title">{service.title}</h2>
-                <strong className="service-card__price">{`${displayPrice} ${currencySymbol}`}</strong>
-              </div>
-
-              <div className="service-card__row service-card__row--bottom">
-                <p className="service-card__description">{service.description}</p>
-                <label className="service-card__action">
-                  <input
-                    type="checkbox"
-                    checked={selected}
-                    onChange={() => onToggleService(service.id)}
-                  />
-                  <span>Añadir</span>
-                </label>
-              </div>
-
-              {selected && service.id === webServiceId && (
+              {selected && isWebService && (
                 <WebConfigurator
                   pages={webConfig.pages}
                   languages={webConfig.languages}
@@ -70,7 +79,7 @@ const ServiceSelectionSection = ({
                   extraPrice={webConfig.extraPrice}
                 />
               )}
-            </article>
+            </ServiceCard>
           )
         })}
       </section>
@@ -78,7 +87,7 @@ const ServiceSelectionSection = ({
       <section className="budget-summary">
         <strong className="budget-summary__value">
           <span className="budget-summary__label">Presupuesto total:</span>
-          {`${totalAmount} ${currencySymbol}`}
+          {`${formattedTotalAmount} ${currencySymbol}`}
         </strong>
       </section>
     </>

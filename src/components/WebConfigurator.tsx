@@ -1,7 +1,7 @@
 ﻿import "./WebConfigurator.css"
 import HelpModal from "./HelpModal"
 import { useState } from "react"
-import { CURRENCY_SYMBOL } from "../constants/web"
+import { CURRENCY_SYMBOL } from "../lib/constants/web"
 
 type WebConfiguratorProps = {
   pages: number

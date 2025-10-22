@@ -151,6 +151,25 @@
   color: #101828;
 }
 
+.budget-list__billing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  background-color: #f2f4f7;
+  color: #475467;
+}
+
+.budget-list__billing--annual {
+  background-color: rgba(249, 115, 22, 0.12);
+  color: #f97316;
+}
+
 .budget-list__services {
   display: flex;
   flex-direction: column;
