@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react"
 import type { SavedBudget } from "../types/budget"
+import { normalize } from "../utils/validation"
 import "./BudgetListSection.css"
 
 type BudgetListSectionProps = {
@@ -23,6 +24,7 @@ const BudgetListSection = ({ budgets, currencySymbol }: BudgetListSectionProps) 
     key: "date",
     order: "desc",
   })
+  const [searchTerm, setSearchTerm] = useState("")
 
   const handleSortClick = (key: SortKey) => {
     setSortConfig((current) =>
@@ -32,8 +34,18 @@ const BudgetListSection = ({ budgets, currencySymbol }: BudgetListSectionProps) 
     )
   }
 
+  const searchFilteredBudgets = useMemo(() => {
+    const normalizedQuery = normalize(searchTerm).toLowerCase()
+
+    if (!normalizedQuery) {
+      return budgets
+    }
+
+    return budgets.filter((budget) => budget.clientName.toLowerCase().includes(normalizedQuery))
+  }, [budgets, searchTerm])
+
   const sortedBudgets = useMemo(() => {
-    const sortedList = [...budgets]
+    const sortedList = [...searchFilteredBudgets]
 
     sortedList.sort((firstBudget, secondBudget) => {
       let result = 0
@@ -59,47 +71,72 @@ const BudgetListSection = ({ budgets, currencySymbol }: BudgetListSectionProps) 
     })
 
     return sortedList
-  }, [budgets, sortConfig])
+  }, [searchFilteredBudgets, sortConfig])
 
   return (
     <section className="budget-list">
       <header className="budget-list__header">
         <h2 className="budget-list__title">Presupuestos en curso</h2>
         {budgets.length > 0 && (
-          <div className="budget-list__sort">
-            {SORT_OPTIONS.map(({ key, label }) => {
-              const isActive = sortConfig.key === key
-              const buttonClassName = [
-                "budget-list__sort-button",
-                isActive ? "budget-list__sort-button--active" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")
+          <div className="budget-list__controls">
+            <label className="budget-list__search">
+              <span className="budget-list__search-label">Buscar presupuestos por nombre</span>
+              <input
+                type="search"
+                name="budget-search"
+                className="budget-list__search-input"
+                placeholder="Buscar por nombre"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
+              <svg className="budget-list__search-icon" viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M10.5 10.5L14 14M11.75 7.375a4.375 4.375 0 11-8.75 0 4.375 4.375 0 018.75 0z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </label>
+            <div className="budget-list__sort">
+              {SORT_OPTIONS.map(({ key, label }) => {
+                const isActive = sortConfig.key === key
+                const buttonClassName = [
+                  "budget-list__sort-button",
+                  isActive ? "budget-list__sort-button--active" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")
 
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  className={buttonClassName}
-                  onClick={() => handleSortClick(key)}
-                  aria-pressed={isActive}
-                >
-                  <span>{label}</span>
-                  {isActive && (
-                    <span
-                      className={`budget-list__sort-icon budget-list__sort-icon--${sortConfig.order}`}
-                      aria-hidden="true"
-                    />
-                  )}
-                </button>
-              )
-            })}
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    className={buttonClassName}
+                    onClick={() => handleSortClick(key)}
+                    aria-pressed={isActive}
+                  >
+                    <span>{label}</span>
+                    {isActive && (
+                      <span
+                        className={`budget-list__sort-icon budget-list__sort-icon--${sortConfig.order}`}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
           </div>
         )}
       </header>
 
       {budgets.length === 0 ? (
         <p className="budget-list__empty">Todavía no hay presupuestos guardados.</p>
+      ) : searchFilteredBudgets.length === 0 ? (
+        <p className="budget-list__empty">No hay presupuestos que coincidan con la búsqueda.</p>
       ) : (
         <ul className="budget-list__items">
           {sortedBudgets.map((budget) => (

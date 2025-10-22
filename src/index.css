@@ -51,3 +51,10 @@ body {
 .btn-circle:disabled {
   opacity: 0.65;
 }
+
+.budget-list__search-input:focus,
+.budget-request__input:focus {
+  outline: none;
+  border-color: #101828;
+  box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.12);
+}
