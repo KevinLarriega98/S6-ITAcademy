@@ -1,20 +1,23 @@
-import type { SavedBudget } from "../../lib/types/budgetTypes"
+﻿import type { SavedBudget } from "../../lib/types/budgetTypes"
 import { formatPrice } from "../../utils/format"
 
-type BudgetListItemProps = {
-  budget: SavedBudget
+type DisplayBudget = SavedBudget & {
   currencySymbol: string
+}
+
+type BudgetListItemProps = {
+  budget: DisplayBudget
 }
 
 const getBillingLabel = (billingCycle: SavedBudget["billingCycle"], discountRate: number) => {
   if (billingCycle === "annual") {
-    return `Pago anual - Ahorra ${Math.round(discountRate * 100)}%`
+    return `Pago anual · Ahorra ${Math.round(discountRate * 100)}%`
   }
 
   return "Pago mensual"
 }
 
-const BudgetListItem = ({ budget, currencySymbol }: BudgetListItemProps) => {
+const BudgetListItem = ({ budget }: BudgetListItemProps) => {
   const billingLabel = getBillingLabel(budget.billingCycle, budget.discountRate)
 
   return (
@@ -35,7 +38,7 @@ const BudgetListItem = ({ budget, currencySymbol }: BudgetListItemProps) => {
       </div>
       <div className="budget-list__total">
         <span>Total</span>
-        <strong>{`${formatPrice(budget.total)} ${currencySymbol}`}</strong>
+        <strong>{`${formatPrice(budget.total)} ${budget.currencySymbol}`}</strong>
       </div>
     </li>
   )

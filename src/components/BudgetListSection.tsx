@@ -1,7 +1,8 @@
-import BudgetListItem from "./budget-list/BudgetListItem"
+﻿import BudgetListItem from "./budget-list/BudgetListItem"
 import BudgetSearchField from "./budget-list/BudgetSearchField"
-import BudgetSortButton from "./budget-list/BudgetSortButton"
+import BudgetSortButton, { type BudgetSortButtonProps } from "./budget-list/BudgetSortButton"
 import { SORT_OPTIONS, useBudgetList } from "../hooks/useBudgetList"
+import type { SortKey } from "../hooks/useBudgetList"
 import type { SavedBudget } from "../lib/types/budgetTypes"
 import "./BudgetListSection.css"
 
@@ -11,11 +12,22 @@ type BudgetListSectionProps = {
 }
 
 const BudgetListSection = ({ budgets, currencySymbol }: BudgetListSectionProps) => {
-  const { sortConfig, searchTerm, setSearchTerm, handleSortClick, sortedBudgets, searchFilteredBudgets } =
-    useBudgetList(budgets)
+  const listState = useBudgetList(budgets)
+  const { searchTerm, setSearchTerm, sortConfig, handleSortClick, results } = listState
 
-  const hasBudgets = budgets.length > 0
-  const hasResults = searchFilteredBudgets.length > 0
+  const hasBudgets = results.all.length > 0
+  const hasResults = results.filtered.length > 0
+
+  const sortButtons: Array<Omit<BudgetSortButtonProps, "onClick"> & { key: SortKey }> = SORT_OPTIONS.map(
+    ({ key, label }) => ({
+      key,
+      label,
+      isActive: sortConfig.key === key,
+      order: sortConfig.order,
+    })
+  )
+
+  const displayBudgets = results.sorted.map((budget) => ({ ...budget, currencySymbol }))
 
   return (
     <section className="budget-list">
@@ -23,14 +35,12 @@ const BudgetListSection = ({ budgets, currencySymbol }: BudgetListSectionProps) 
         <h2 className="budget-list__title">Presupuestos en curso</h2>
         {hasBudgets && (
           <div className="budget-list__controls">
-            <BudgetSearchField value={searchTerm} onChange={(value) => setSearchTerm(value)} />
+            <BudgetSearchField value={searchTerm} onChange={setSearchTerm} />
             <div className="budget-list__sort">
-              {SORT_OPTIONS.map(({ key, label }) => (
+              {sortButtons.map(({ key, ...buttonProps }) => (
                 <BudgetSortButton
                   key={key}
-                  label={label}
-                  isActive={sortConfig.key === key}
-                  order={sortConfig.order}
+                  {...buttonProps}
                   onClick={() => handleSortClick(key)}
                 />
               ))}
@@ -45,8 +55,8 @@ const BudgetListSection = ({ budgets, currencySymbol }: BudgetListSectionProps) 
         <p className="budget-list__empty">No hay presupuestos que coincidan con la búsqueda.</p>
       ) : (
         <ul className="budget-list__items">
-          {sortedBudgets.map((budget) => (
-            <BudgetListItem key={budget.id} budget={budget} currencySymbol={currencySymbol} />
+          {displayBudgets.map((budget) => (
+            <BudgetListItem key={budget.id} budget={budget} />
           ))}
         </ul>
       )}

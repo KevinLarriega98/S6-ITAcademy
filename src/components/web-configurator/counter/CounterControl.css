@@ -1,0 +1,23 @@
+.web-configurator__control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.web-configurator__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.web-configurator__counter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.web-configurator__counter-button {
+  width: 2.5rem;
+  height: 2.5rem;
+}

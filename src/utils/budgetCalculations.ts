@@ -1,25 +1,16 @@
-import { SERVICE_OPTIONS, PRICE_MAP } from "../data/services"
-import { WEB_CONFIGURATION_UNIT_PRICE, WEB_SERVICE_ID } from "../lib/constants/web"
+import { getServiceById } from "../data/services"
+import { WEB_SERVICE_ID } from "../lib/constants/pricingConstants"
+
+const formatCountLabel = (value: number, singular: string, plural: string) =>
+  `${value} ${value === 1 ? singular : plural}`
 
 export const buildServiceLabel = (serviceId: string, pages: number, languages: number) => {
   if (serviceId === WEB_SERVICE_ID) {
-    const pagesLabel = `${pages} ${pages === 1 ? "página" : "páginas"}`
-    const languagesLabel = `${languages} ${languages === 1 ? "idioma" : "idiomas"}`
+    const pagesLabel = formatCountLabel(pages, "página", "páginas")
+    const languagesLabel = formatCountLabel(languages, "lenguaje", "lenguajes")
     return `Web (${pagesLabel} y ${languagesLabel})`
   }
 
-  const service = SERVICE_OPTIONS.find((item) => item.id === serviceId)
+  const service = getServiceById(serviceId)
   return service?.title ?? serviceId
 }
-
-export const calculateTotalAmount = (services: string[], webTotal: number, priceMap = PRICE_MAP) => {
-  const total = services.reduce(
-    (amount, serviceId) => amount + (serviceId === WEB_SERVICE_ID ? webTotal : priceMap.get(serviceId) ?? 0),
-    0,
-  )
-
-  return Number(total.toFixed(2))
-}
-
-export const calculateWebExtraPrice = (pages: number, languages: number) =>
-  (pages + languages) * WEB_CONFIGURATION_UNIT_PRICE

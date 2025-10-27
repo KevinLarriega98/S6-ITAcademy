@@ -1,9 +1,23 @@
 import { useCallback, useMemo, useState } from "react"
-import { SERVICE_OPTIONS, WEB_BASE_PRICE } from "../data/services"
-import { calculateTotalAmount, calculateWebExtraPrice } from "../utils/budgetCalculations"
+import type { ServiceOption } from "../lib/types/budgetTypes"
+import {
+  buildDiscountedPriceMap,
+  calculateTotalAmount,
+  calculateWebExtraPrice,
+  getDiscountMultiplier,
+  getWebBasePrice,
+  getWebTotalPrice,
+} from "../utils/budgetPricing"
 
 type UseBudgetCalculatorOptions = {
+  services: ServiceOption[]
+  webServiceId: string
+  webBasePrice: number
   discountRate: number
+  initialSelectedServices?: string[]
+  initialWebPages?: number
+  initialWebLanguages?: number
+  initialIsAnnualBilling?: boolean
 }
 
 type WebConfigState = {
@@ -22,9 +36,11 @@ type PricingDetails = {
 
 type UseBudgetCalculatorResult = {
   selectedServices: string[]
+  setSelectedServices: (services: string[]) => void
   toggleService: (serviceId: string) => void
   resetSelections: () => void
   isAnnualBilling: boolean
+  setAnnualBilling: (value: boolean) => void
   toggleBillingCycle: () => void
   discountRate: number
   servicePriceMap: Map<string, number>
@@ -32,11 +48,28 @@ type UseBudgetCalculatorResult = {
   webConfig: WebConfigState
 }
 
-export const useBudgetCalculator = ({ discountRate }: UseBudgetCalculatorOptions): UseBudgetCalculatorResult => {
-  const [selectedServices, setSelectedServices] = useState<string[]>([])
-  const [webPages, setWebPages] = useState(0)
-  const [webLanguages, setWebLanguages] = useState(0)
-  const [isAnnualBilling, setIsAnnualBilling] = useState(false)
+export const useBudgetCalculator = ({
+  services,
+  webServiceId,
+  webBasePrice: baseWebPrice,
+  discountRate,
+  initialSelectedServices = [],
+  initialWebPages = 0,
+  initialWebLanguages = 0,
+  initialIsAnnualBilling = false,
+}: UseBudgetCalculatorOptions): UseBudgetCalculatorResult => {
+  const [selectedServices, setSelectedServices] = useState<string[]>(initialSelectedServices)
+  const [webPages, setWebPages] = useState(initialWebPages)
+  const [webLanguages, setWebLanguages] = useState(initialWebLanguages)
+  const [isAnnualBilling, setIsAnnualBilling] = useState(initialIsAnnualBilling)
+
+  const replaceSelectedServices = useCallback((services: string[]) => {
+    setSelectedServices(Array.from(new Set(services)))
+  }, [])
+
+  const setAnnualBilling = useCallback((value: boolean) => {
+    setIsAnnualBilling(value)
+  }, [])
 
   const toggleService = useCallback((serviceId: string) => {
     setSelectedServices((current) =>
@@ -62,41 +95,38 @@ export const useBudgetCalculator = ({ discountRate }: UseBudgetCalculatorOptions
   )
 
   const discountMultiplier = useMemo(
-    () => (isAnnualBilling ? 1 - discountRate : 1),
+    () => getDiscountMultiplier(isAnnualBilling, discountRate),
     [discountRate, isAnnualBilling],
   )
 
   const servicePriceMap = useMemo(
     () =>
-      new Map(
-        SERVICE_OPTIONS.map((service) => [
-          service.id,
-          Number((service.price * discountMultiplier).toFixed(2)),
-        ]),
-      ),
-    [discountMultiplier],
+      buildDiscountedPriceMap(services, discountMultiplier),
+    [discountMultiplier, services],
   )
 
   const webBasePrice = useMemo(
-    () => Number((WEB_BASE_PRICE * discountMultiplier).toFixed(2)),
-    [discountMultiplier],
+    () => getWebBasePrice(baseWebPrice, discountMultiplier),
+    [baseWebPrice, discountMultiplier],
   )
 
   const webTotalPrice = useMemo(
-    () => Number((webBasePrice + webExtraPrice).toFixed(2)),
+    () => getWebTotalPrice(webBasePrice, webExtraPrice),
     [webBasePrice, webExtraPrice],
   )
 
   const totalAmount = useMemo(
-    () => calculateTotalAmount(selectedServices, webTotalPrice, servicePriceMap),
-    [selectedServices, servicePriceMap, webTotalPrice],
+    () => calculateTotalAmount(selectedServices, webTotalPrice, servicePriceMap, webServiceId),
+    [selectedServices, servicePriceMap, webServiceId, webTotalPrice],
   )
 
   return {
     selectedServices,
+    setSelectedServices: replaceSelectedServices,
     toggleService,
     resetSelections,
     isAnnualBilling,
+    setAnnualBilling,
     toggleBillingCycle,
     discountRate,
     servicePriceMap,

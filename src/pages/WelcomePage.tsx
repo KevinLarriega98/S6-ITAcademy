@@ -24,7 +24,7 @@ const WelcomePage = () => {
 
         <ul className="welcome-page__benefits">
           <li>Define qué necesitas sin hojas de cálculo ni fórmulas.</li>
-          <li>Ajusta páginas e idiomas y visualiza el precio en tiempo real.</li>
+          <li>Ajusta páginas y lenguajes y visualiza el precio en tiempo real.</li>
           <li>Toma decisiones informadas con cifras transparentes.</li>
         </ul>
 

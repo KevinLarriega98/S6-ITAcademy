@@ -1,6 +1,6 @@
 import type { SortOrder } from "../../hooks/useBudgetList"
 
-type BudgetSortButtonProps = {
+export type BudgetSortButtonProps = {
   label: string
   isActive: boolean
   order: SortOrder
