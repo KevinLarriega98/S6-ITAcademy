@@ -60,7 +60,7 @@ const getControls = () => {
  * Scenario: adjust web configurator updates extra price in steps of 30
  * Given the web configurator starts with 0 pages and 0 languages
  * When the user increases and decreases the counters
- * Then the extra price and total change in 30 € steps and never drop below 0
+ * Then the extra price and total change in increments of 30 € and never drop below 0
  */
 test("adjust web configurator updates prices in steps of 30", async () => {
   const user = userEvent.setup()

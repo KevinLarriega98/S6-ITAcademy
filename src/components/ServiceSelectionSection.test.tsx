@@ -89,6 +89,12 @@ const expectConfiguratorVisible = (visible: boolean) => {
   visible ? expect(query).toBeInTheDocument() : expect(query).toBeNull()
 }
 
+/**
+ * Scenario: selecting services updates totals and reveals the web configurator
+ * Given the calculator starts with no services selected
+ * When the user enables the SEO, Ads and Web services
+ * Then the total increases after each selection and the web configurator becomes visible
+ */
 test("select services updates total and shows configurator", async () => {
   const user = userEvent.setup()
   render(<TestConfigurator />)
@@ -104,6 +110,12 @@ test("select services updates total and shows configurator", async () => {
   expectConfiguratorVisible(true)
 })
 
+/**
+ * Scenario: deselecting services resets totals and hides the web configurator
+ * Given the SEO, Ads and Web services are selected
+ * When the user deselects them one by one
+ * Then the total decreases accordingly and the web configurator disappears when Web is removed
+ */
 test("deselect services resets total and hides configurator", async () => {
   const user = userEvent.setup()
   render(<TestConfigurator />)

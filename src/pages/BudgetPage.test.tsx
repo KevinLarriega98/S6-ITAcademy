@@ -20,9 +20,9 @@ const getServiceCheckbox = (title: string) => {
 
 /**
  * Scenario: valid form data and one selected service enable the submit button
- * Given the request form starts vacío
- * When the user fills all fields con valores válidos y marca un servicio
- * Then el botón de envío pasa a estar habilitado
+ * Given the request form starts empty
+ * When the user fills all fields with valid values and selects a service
+ * Then the submit button becomes enabled
  */
 test("valid inputs and a selected service enable submit button", async () => {
   const user = userEvent.setup()
