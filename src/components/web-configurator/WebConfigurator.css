@@ -132,6 +132,12 @@
     align-items: flex-start;
   }
 
+  .web-configurator__control:last-child {
+    margin-left: auto;
+    width: fit-content;
+    justify-self: end;
+  }
+
   .web-configurator__label {
     justify-content: flex-start;
   }
