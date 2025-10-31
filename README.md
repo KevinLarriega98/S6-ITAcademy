@@ -30,20 +30,25 @@ Sprint 6/
 │   ├── App.tsx                # Root layout with router outlet
 │   ├── main.tsx               # Vite bootstrap entry
 │   ├── index.css              # Global design tokens and reset
-│   ├── components/
-│   │   ├── ServiceSelectionSection.tsx (+ .css + .test.tsx)
-│   │   ├── ServiceBillingToggle.test.tsx
-│   │   ├── BudgetRequestSection.tsx (+ .css)
-│   │   ├── BudgetListSection.tsx (+ .css) and budget-list/* atoms
-│   │   ├── web-configurator/  # WebConfigurator component, styles, tests, counter control
-│   │   └── HelpModal.tsx (+ .css)
-│   ├── pages/
-│   │   ├── BudgetPage.tsx (+ .css + .test.tsx)
-│   │   └── WelcomePage.tsx
-│   ├── data/                  # Service catalog and base prices
-│   ├── forms/                 # Form field configs and validation rules
-│   ├── hooks/                 # Calculator logic, query param syncing, list utilities
-│   └── utils/                 # Pure helpers (pricing, formatting, ids)
+│   ├── features/
+│   │   ├── budget/
+│   │   │   ├── components/
+│   │   │   │   ├── BudgetListSection/ (+ budget-list/* atoms)
+│   │   │   │   ├── BudgetRequestSection/
+│   │   │   │   ├── ServiceSelectionSection/ (+ service-selection/*)
+│   │   │   │   └── WebConfigurator/ (+ counter/*)
+│   │   │   ├── constants/     # Pricing constants and currency symbols
+│   │   │   ├── data/          # Service catalog and base prices
+│   │   │   ├── forms/         # Form field configs and validation helpers
+│   │   │   ├── hooks/         # Calculator logic, URL syncing, list utilities
+│   │   │   ├── pages/         # Budget page entry point (+ tests)
+│   │   │   ├── types/         # Shared TypeScript types for budgets
+│   │   │   └── utils/         # Calculations, formatting bridges, id helpers
+│   │   └── welcome/
+│   │       └── pages/         # Landing page for the configurator
+│   └── shared/
+│       ├── components/        # Cross-feature UI primitives (HelpModal, etc.)
+│       └── utils/             # Common helpers (formatting, validation)
 ├── package.json               # Scripts and dependency manifest
 ├── tsconfig*.json             # TypeScript project references
 └── vite.config.ts             # Vite + React SWC configuration
@@ -52,12 +57,12 @@ Sprint 6/
 ---
 
 ## 🛠️ Tech Stack
-- React 19 + TypeScript 5
-- Vite 7 with the SWC React plugin
-- React Router 7 for navigation and memory routing in tests
-- Plain CSS modules scoped per component
-- Vitest 4 + React Testing Library 16 + jsdom for component testing
-- ESLint 9 with TypeScript and React-focused rules
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" height="18" style="vertical-align: text-bottom;" />&nbsp;<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" height="18" style="vertical-align: text-bottom;" /> React 19 + TypeScript 5
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" alt="Vite" height="18" style="vertical-align: text-bottom;" /> Vite 7 with the SWC React plugin
+- <img src="https://cdn.simpleicons.org/reactrouter/CA4245/ffffff" alt="React Router" height="18" style="vertical-align: text-bottom;" /> React Router 7 for navigation and memory routing in tests
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" height="18" style="vertical-align: text-bottom;" /> Plain CSS modules scoped per component
+- <img src="https://cdn.simpleicons.org/vitest/729B1B/ffffff" alt="Vitest" height="18" style="vertical-align: text-bottom;" />&nbsp;<img src="https://testing-library.com/img/octopus-64x64.png" alt="Testing Library" height="18" style="vertical-align: text-bottom;" /> Vitest 4 + React Testing Library 16 + jsdom for component testing
+- <img src="https://cdn.simpleicons.org/eslint/4B32C3/ffffff" alt="ESLint" height="18" style="vertical-align: text-bottom;" /> ESLint 9 with TypeScript and React-focused rules
 
 ---
 

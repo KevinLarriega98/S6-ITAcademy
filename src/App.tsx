@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import WelcomePage from './pages/WelcomePage'
-import BudgetPage from './pages/BudgetPage'
-import Header from './components/Header'
+import WelcomePage from './features/welcome/pages/WelcomePage'
+import BudgetPage from './features/budget/pages/BudgetPage/BudgetPage'
+import Header from './shared/components/Header/Header'
 
 function App() {
   return (
