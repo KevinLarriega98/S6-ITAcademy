@@ -1,8 +1,7 @@
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import {
   budgetFormFields,
   createBudgetFormValues,
-  normalizeBudgetFormValues,
   validateBudgetForm,
   isBudgetFormValid,
   type BudgetFormField,
@@ -20,7 +19,7 @@ type BudgetFormFieldView = BudgetFormField & {
 
 type UseBudgetFormResult = {
   fields: BudgetFormFieldView[]
-  normalizedValues: BudgetFormValues
+  values: BudgetFormValues
   isValid: boolean
   reset: () => void
 }
@@ -35,37 +34,28 @@ export const useBudgetForm = (): UseBudgetFormResult => {
   const [values, setValues] = useState<BudgetFormValues>(createBudgetFormValues())
   const [touched, setTouched] = useState<Record<BudgetFormFieldKey, boolean>>(initialTouchedState)
 
-  const normalizedValues = normalizeBudgetFormValues(values)
-  const validity = validateBudgetForm(normalizedValues)
+  const validity = validateBudgetForm(values)
   const isValid = isBudgetFormValid(validity)
-
-  const touchField = useCallback((key: BudgetFormFieldKey) => {
-    setTouched((current) => ({
-      ...current,
-      [key]: true,
-    }))
-  }, [])
 
   const fields = budgetFormFields.map((field) => {
     const currentValue = values[field.key]
-    const sanitizeInput = field.sanitize
-
-    const handleChange = (nextValue: string) => {
-      const valueToStore = sanitizeInput ? sanitizeInput(nextValue) : nextValue
-
-      setValues((current) => ({
-        ...current,
-        [field.key]: valueToStore,
-      }))
-    }
-
     const isInvalidField = touched[field.key] && !validity[field.key]
 
     return {
       ...field,
       value: currentValue,
-      onChange: handleChange,
-      onBlur: () => touchField(field.key),
+      onChange: (nextValue: string) => {
+        setValues((current) => ({
+          ...current,
+          [field.key]: nextValue,
+        }))
+      },
+      onBlur: () => {
+        setTouched((current) => ({
+          ...current,
+          [field.key]: true,
+        }))
+      },
       isInvalid: isInvalidField,
       errorMessage: field.title,
     }
@@ -78,7 +68,7 @@ export const useBudgetForm = (): UseBudgetFormResult => {
 
   return {
     fields,
-    normalizedValues,
+    values,
     isValid,
     reset,
   }

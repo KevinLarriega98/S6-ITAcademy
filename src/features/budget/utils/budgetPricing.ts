@@ -33,4 +33,3 @@ export const calculateTotalAmount = (
       return total + (priceMap.get(serviceId) ?? 0)
     }, 0),
   )
-

@@ -1,33 +1,22 @@
-import {
-  EMAIL_PATTERN,
-  NAME_PATTERN,
-  PHONE_PATTERN,
-  normalize as normalizeValue,
-  isEmailValid,
-  isNameValid,
-  isPhoneValid,
-} from "../../../shared/utils/validation"
-
 export type BudgetFormFieldKey = "name" | "phone" | "email"
 
 export type BudgetFormValues = Record<BudgetFormFieldKey, string>
-
 export type BudgetFormValidity = Record<BudgetFormFieldKey, boolean>
 
-type BudgetFormCommonField = {
+export type BudgetFormField = {
   key: BudgetFormFieldKey
   label: string
   placeholder: string
   type: "text" | "tel" | "email"
-  pattern: string
   title: string
+  required: boolean
+  pattern?: string
   inputMode?: "numeric" | "email"
   autoComplete?: string
-  required?: boolean
-  sanitize?: (value: string) => string
 }
 
-export type BudgetFormField = BudgetFormCommonField
+const PHONE_PATTERN = "\\d{9}"
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export const budgetFormFields: BudgetFormField[] = [
   {
@@ -35,33 +24,30 @@ export const budgetFormFields: BudgetFormField[] = [
     label: "Nombre",
     placeholder: "Nombre",
     type: "text",
-    pattern: NAME_PATTERN,
-    title: "Introduce al menos dos letras. No se permiten números.",
-    autoComplete: "name",
+    title: "Introduce al menos dos letras.",
     required: true,
+    autoComplete: "name",
   },
   {
     key: "phone",
     label: "Teléfono",
     placeholder: "Teléfono",
     type: "tel",
-    pattern: PHONE_PATTERN,
     title: "Introduce un número de teléfono de 9 dígitos.",
+    required: true,
+    pattern: PHONE_PATTERN,
     inputMode: "numeric",
     autoComplete: "tel",
-    required: true,
-    sanitize: (value: string) => value.replace(/\D/g, ""),
   },
   {
     key: "email",
     label: "Correo electrónico",
     placeholder: "Correo electrónico",
     type: "email",
-    pattern: EMAIL_PATTERN,
     title: "Introduce un correo electrónico válido (p. ej., nombre@dominio.com).",
+    required: true,
     inputMode: "email",
     autoComplete: "email",
-    required: true,
   },
 ]
 
@@ -71,16 +57,10 @@ export const createBudgetFormValues = (): BudgetFormValues => ({
   email: "",
 })
 
-export const normalizeBudgetFormValues = (values: BudgetFormValues): BudgetFormValues => ({
-  name: normalizeValue(values.name),
-  phone: normalizeValue(values.phone),
-  email: normalizeValue(values.email),
-})
-
 export const validateBudgetForm = (values: BudgetFormValues): BudgetFormValidity => ({
-  name: isNameValid(values.name),
-  phone: isPhoneValid(values.phone),
-  email: isEmailValid(values.email),
+  name: values.name.trim().length >= 2,
+  phone: /^\d{9}$/.test(values.phone),
+  email: emailRegex.test(values.email.trim()),
 })
 
 export const isBudgetFormValid = (validity: BudgetFormValidity) =>

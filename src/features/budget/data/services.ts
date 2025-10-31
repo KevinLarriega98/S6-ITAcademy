@@ -24,10 +24,11 @@ export const SERVICE_OPTIONS: ServiceOption[] = [
   },
 ]
 
-export const SERVICE_MAP = new Map(SERVICE_OPTIONS.map((service) => [service.id, service]))
-export const SERVICE_PRICE_MAP = new Map(SERVICE_OPTIONS.map((service) => [service.id, service.price]))
+export const WEB_BASE_PRICE =
+  SERVICE_OPTIONS.find((service) => service.id === WEB_SERVICE_ID)?.price ?? 0
 
-export const WEB_BASE_PRICE = SERVICE_PRICE_MAP.get(WEB_SERVICE_ID) ?? 0
+export const getServiceById = (serviceId: string) =>
+  SERVICE_OPTIONS.find((service) => service.id === serviceId)
 
-export const getServiceById = (serviceId: string) => SERVICE_MAP.get(serviceId)
-export const getServicePrice = (serviceId: string) => SERVICE_PRICE_MAP.get(serviceId)
+export const getServicePrice = (serviceId: string) =>
+  SERVICE_OPTIONS.find((service) => service.id === serviceId)?.price

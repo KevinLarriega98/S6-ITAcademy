@@ -11,7 +11,7 @@ import "./BudgetPage.css"
 
 const BudgetPage = () => {
   const navigate = useNavigate()
-  const { queryState, replaceQuery, queryString } = useBudgetQueryParams(SERVICE_OPTIONS, WEB_SERVICE_ID)
+  const { queryState, replaceQuery } = useBudgetQueryParams(SERVICE_OPTIONS, WEB_SERVICE_ID)
   const initialQueryStateRef = useRef(queryState)
 
   const { selection, form, budgets } = useBudgetPageController({
@@ -25,9 +25,7 @@ const BudgetPage = () => {
     initialIsAnnualBilling: initialQueryStateRef.current.isAnnualBilling,
     urlSync: {
       queryState,
-      queryString,
       replaceQuery,
-      services: SERVICE_OPTIONS,
     },
   })
 

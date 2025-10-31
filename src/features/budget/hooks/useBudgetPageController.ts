@@ -23,47 +23,46 @@ type UseBudgetPageControllerResult = {
 
 const useBudgetPageController = (options: UseBudgetControllerOptions): UseBudgetPageControllerResult => {
   const selection = useBudgetController(options)
-  const { fields, normalizedValues, isValid, reset } = useBudgetForm()
+  const { fields, values, isValid, reset } = useBudgetForm()
   const [budgets, setBudgets] = useState<SavedBudget[]>([])
   const [submissionError, setSubmissionError] = useState<string | null>(null)
 
-  const isSubmitDisabled =
-    !isValid || selection.selectedServices.length === 0 || selection.pricing.totalAmount === 0
+  const isSubmitDisabled = !isValid || selection.selectedServices.length === 0
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (isSubmitDisabled) {
+      setSubmissionError("Completa el formulario y selecciona al menos un servicio.")
       return
     }
 
     setSubmissionError(null)
 
-    try {
-      const { pages: webPages, languages: webLanguages } = selection.webConfig
-      const normalized = normalizedValues
-      const billingCycle: BillingCycle = selection.isAnnualBilling ? "annual" : "monthly"
+    const { pages: webPages, languages: webLanguages } = selection.webConfig
+    const billingCycle: BillingCycle = selection.isAnnualBilling ? "annual" : "monthly"
+    const clientName = values.name.trim()
+    const phone = values.phone.trim()
+    const email = values.email.trim()
 
-      const newBudget: SavedBudget = {
-        id: generateId(),
-        clientName: normalized.name,
-        phone: normalized.phone,
-        email: normalized.email,
-        services: selection.selectedServices.map((serviceId) => buildServiceLabel(serviceId, webPages, webLanguages)),
-        total: selection.pricing.totalAmount,
-        createdAt: new Date().toISOString(),
-        billingCycle,
-        discountRate: selection.isAnnualBilling ? selection.discountRate : 0,
-      }
-
-      setBudgets((current) => [newBudget, ...current])
-      reset()
-      selection.resetSelections()
-      selection.setAnnualBilling(false)
-    } catch (error) {
-      console.error("Failed to create budget entry", error)
-      setSubmissionError("No se pudo guardar el presupuesto. Inténtalo de nuevo.")
+    const newBudget: SavedBudget = {
+      id: generateId(),
+      clientName,
+      phone,
+      email,
+      services: selection.selectedServices.map((serviceId) =>
+        buildServiceLabel(serviceId, webPages, webLanguages),
+      ),
+      total: selection.pricing.totalAmount,
+      createdAt: new Date().toISOString(),
+      billingCycle,
+      discountRate: selection.isAnnualBilling ? selection.discountRate : 0,
     }
+
+    setBudgets((current) => [newBudget, ...current])
+    reset()
+    selection.resetSelections()
+    selection.setAnnualBilling(false)
   }
 
   return {

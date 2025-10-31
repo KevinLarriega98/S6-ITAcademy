@@ -1,14 +1,15 @@
-import type { ServiceOption } from "../types/budgetTypes"
 import type { BudgetQueryState } from "./useBudgetQueryParams"
-import { useBudgetCalculator, type UseBudgetCalculatorOptions, type UseBudgetCalculatorResult } from "./useBudgetCalculator"
+import {
+  useBudgetCalculator,
+  type UseBudgetCalculatorOptions,
+  type UseBudgetCalculatorResult,
+} from "./useBudgetCalculator"
 import { useBudgetUrlSync } from "./useBudgetUrlSync"
 
 type UseBudgetControllerOptions = UseBudgetCalculatorOptions & {
   urlSync: {
     queryState: BudgetQueryState
-    queryString: string
     replaceQuery: (state: BudgetQueryState) => void
-    services: ServiceOption[]
   }
 }
 
@@ -20,10 +21,7 @@ const useBudgetController = ({
 
   useBudgetUrlSync({
     queryState: urlSync.queryState,
-    queryString: urlSync.queryString,
     replaceQuery: urlSync.replaceQuery,
-    services: urlSync.services,
-    webServiceId: calculatorOptions.webServiceId,
     selectedServices: calculator.selectedServices,
     setSelectedServices: calculator.setSelectedServices,
     webPages: calculator.webConfig.pages,
